@@ -18,7 +18,7 @@ export default function HomePage() {
         maxAge: 60 * 60 * 24 * 30,
         path: '/',
       })
-      window.location.href = ""
+      window.location.href = "/"
     } else {
       console.log("not verified")
       notifications.show({
