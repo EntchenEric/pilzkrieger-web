@@ -23,8 +23,6 @@ const nextConfig = {
 		// your project has ESLint errors.
 		ignoreDuringBuilds: true,
 	},
-	basePath: '/PilzkriegerWeb',
-
 }
 
 module.exports = nextConfig

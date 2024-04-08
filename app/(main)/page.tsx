@@ -66,7 +66,7 @@ export default function HomePage() {
           <TextInput {...addMemberForm.getInputProps('id')} label="ID" placeholder="ID" />
         </Container>
         <Button onClick={async () => {
-          const respo = await fetch("/PilzkriegerWeb/api/addUser", {
+          const respo = await fetch("/api/addUser", {
             method: "POST",
             body: JSON.stringify(addMemberForm.values)
           })
@@ -90,7 +90,7 @@ export default function HomePage() {
           onChange={setDeleteMemberValue}
         />
         <Button onClick={() => {
-          fetch("/PilzkriegerWeb/api/removeUser", {
+          fetch("/api/removeUser", {
             method: "POST",
             body: JSON.stringify({ id: deleteMemberValue?.split("(")[1].split(")")[0] })
           })
@@ -118,7 +118,7 @@ export default function HomePage() {
         </Container>
 
         <Button onClick={() => {
-          fetch("/PilzkriegerWeb/api/editUser", {
+          fetch("/api/editUser", {
             method: "POST",
             body: JSON.stringify({ id: editMemberValue?.split("(")[1].split(")")[0], ...editMemberForm.values })
           })
@@ -135,7 +135,7 @@ export default function HomePage() {
 
         <Button onClick={() => {
           fishiTeilnehmer.map((user) => {
-            fetch("/PilzkriegerWeb/api/editUser", {
+            fetch("/api/editUser", {
               method: "POST",
               body: JSON.stringify({ id: user.split("(")[1].split(")")[0], fishParticipation: true })
             })
@@ -153,7 +153,7 @@ export default function HomePage() {
         <NumberInput value={bulkDonationValue} onChange={setBulkDonationValue} label="Spenden" placeholder="Spenden" min={0} max={500} step={100}/>
         <Button onClick={() => {
           bulkDonationUsers.map((user) => {
-            fetch("/PilzkriegerWeb/api/editUser", {
+            fetch("/api/editUser", {
               method: "POST",
               body: JSON.stringify({ id: user.split("(")[1].split(")")[0], donations: 100 })
             })

@@ -15,7 +15,7 @@ export default function RootLayout({ children }: { children: any }) {
       console.log("verified")
     } else {
       console.log("not verified")
-      window.location.href = "/PilzkriegerWeb/authentificate"
+      window.location.href = "/authentificate"
     }
   }, [])
 
