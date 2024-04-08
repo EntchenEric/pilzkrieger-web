@@ -117,11 +117,9 @@ export default function HomePage() {
               method: "POST",
               body: JSON.stringify(addMemberForm.values),
             });
-            console.log(respo);
             const respoData = await respo.json();
-            console.log(respoData);
             //reload window
-            // window.location.reload()
+            window.location.reload()
           }}
         >
           Hinzufügen
@@ -223,7 +221,6 @@ export default function HomePage() {
           value={fishiTeilnehmer}
           onChange={setFishiTelnehmer}
         />
-        ;
         <Button
           onClick={() => {
             fishiTeilnehmer.map((user) => {
@@ -272,7 +269,7 @@ export default function HomePage() {
                 method: "POST",
                 body: JSON.stringify({
                   id: user.split("(")[1].split(")")[0],
-                  donations: 100,
+                  donations: bulkDonationValue,
                 }),
               });
             });
