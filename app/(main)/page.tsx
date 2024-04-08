@@ -74,7 +74,15 @@ export default function HomePage() {
 
   useEffect(() => {
     const getUsers = async () => {
-      const response = await fetch("api/getUsers");
+      const response = await fetch("api/getUsers",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({}),
+        }
+      );
       const data = await response.json();
       const users = data.data;
       console.log(users);
