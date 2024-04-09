@@ -1,13 +1,15 @@
 import { Container, Collapse, Text } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import moment from "moment";
+import { useEffect, useState } from "react";
 
-export function UserCard(data: any) {
+export function UserCard({ data, minFishPercente, minDonationPercente}: {data: any, minFishPercente: number, minDonationPercente: number}) {
   const [opened, { toggle: toggle }] = useDisclosure(false);
-  const [nameHistoryopened, { toggle: toggleNameHistory }] =
-    useDisclosure(false);
+  const [nameHistoryopened, { toggle: toggleNameHistory }] = useDisclosure(false);
 
-  const date1: any = new Date(data.data.joinedAt);
+  const [nameColor, setNameColor] = useState("")
+
+  const date1: any = new Date(data.joinedAt);
   const date2: any = new Date();
   const diffTime = Math.abs(date2 - date1);
   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
@@ -34,32 +36,63 @@ export function UserCard(data: any) {
     }
   }
 
+  function isWithinRange(num1: number, num2: number, range: number) {
+    return Math.abs(num1 - num2) <= range;
+  }
 
   const maxPossibleFish = (diffDays * 2) - getTimeStatus(date1);
 
   const maxPossibleDonatons = diffDays * 500;
 
+  useEffect(() => {
+    if(data.name === "Eichel"){
+      console.log((data.donations / maxPossibleDonatons) * 100 < minDonationPercente)
+      console.log((data.fish / maxPossibleFish) * 100 < minFishPercente)
+    }
+    if ((data.donations / maxPossibleDonatons) * 100 < minDonationPercente) {
+      setNameColor("darkred")
+    }
+    else if (isWithinRange((data.donations / maxPossibleDonatons) * 100, minDonationPercente, 4)) {
+      setNameColor("red")
+    }
+    else if (isWithinRange((data.donations / maxPossibleDonatons) * 100, minDonationPercente, 10)) {
+      setNameColor("orange")
+    }
+  
+    if((data.fish / maxPossibleFish) * 100 < minFishPercente) {
+      setNameColor("darkred")
+    }
+    else if (isWithinRange((data.fish / maxPossibleFish) * 100, minFishPercente, 4)) {
+      setNameColor("red")
+    }
+    else if (isWithinRange((data.fish / maxPossibleFish) * 100, minFishPercente, 10)) {
+      setNameColor("orange")
+    }
+  }, [])
+
+  
+
   return (
     <>
       <Container>
-        <Text size="xl" fw="800" onClick={toggle} style={{cursor: "pointer",  userSelect: "none"}}>
-          {data.data.name}
+        <Text size="xl" fw="800" onClick={toggle} style={{ cursor: "pointer", userSelect: "none" }} c={nameColor}>
+          {data.name}
         </Text>
         <Collapse in={opened}>
-          <Text>Id: {data.data.id}</Text>
-          <Text>Name: {data.data.name}</Text>
-          <Text>Spenden: {data.data.donations}/{maxPossibleDonatons}</Text>
+          <Text>Id: {data.id}</Text>
+          <Text>Name: {data.name}</Text>
+          <Text>Spenden: {data.donations}/{maxPossibleDonatons} ({Math.round((data.donations / maxPossibleDonatons) * 100)}%)</Text>
           <Text>
-            Fisch teilnahmen: {data.data.fish}/{maxPossibleFish}
+            Fisch teilnahmen: {data.fish}/{maxPossibleFish} ({Math.round((data.fish / maxPossibleFish) * 100)}%)
           </Text>
           <Text>
-            Beigetreten am: {moment(data.data.joinedAt).format("Do MMM YYYY")}
+            Beigetreten am: {moment(data.joinedAt).format("Do MMM YYYY")}
           </Text>
-          {data.data.nameHistories.length != 0 ? (
+          {data.nameHistories.length != 0 ? (
             <>
-              <Text style={{cursor: "pointer",  userSelect: "none"}} onClick={toggleNameHistory}>Vergangene Namen</Text>
+              <Text style={{ cursor: "pointer", userSelect: "none" }} onClick={toggleNameHistory}>Vergangene Namen</Text>
               <Collapse in={nameHistoryopened}>
-                {data.data.nameHistories.map((name: any, index: number) => {
+                {data.nameHistories.map((name: any, index: number) => {
                   console.log(name)
                   return <Text key={index}>{name.name}</Text>;
                 })}

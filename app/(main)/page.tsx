@@ -76,6 +76,8 @@ export default function HomePage() {
   const [users, setUsers] = useState([]);
 
   const [memberColumns, setMemberColumns] = useState(5);
+  const [minDonationPercente, setMinDonationPercente] = useState(80);
+  const [minFishPercente, setminFishPercente] = useState(80);
 
 
   useEffect(() => {
@@ -99,7 +101,7 @@ export default function HomePage() {
   }, []);
 
   return (
-    <>
+    <Container px={150} size={"100%"}>
       <Modal
         opened={addMemberModalOpened}
         onClose={closeAddMemberModal}
@@ -191,13 +193,13 @@ export default function HomePage() {
 
         <Container mb={"lg"}>
           <TextInput
-            disabled = {editMemberValue === null || editMemberValue === ""}
+            disabled={editMemberValue === null || editMemberValue === ""}
             {...editMemberForm.getInputProps("nameChange")}
             label="Name"
             placeholder="Name"
           />
           <NumberInput
-            disabled = {editMemberValue === null || editMemberValue === ""}
+            disabled={editMemberValue === null || editMemberValue === ""}
             {...editMemberForm.getInputProps("donations")}
             label="Spenden"
             placeholder="Spenden"
@@ -208,14 +210,14 @@ export default function HomePage() {
             stepHoldInterval={(t) => Math.max(1000 / t ** 1.2, 25)}
           />
           <NumberInput
-            disabled = {editMemberValue === null || editMemberValue === ""}
+            disabled={editMemberValue === null || editMemberValue === ""}
             mt={"sm"}
             {...editMemberForm.getInputProps("fishParticipations")}
             label="Fischteilnahme"
             placeholder="Fischteilnahme"
           />
           <DatePickerInput
-            disabled = {editMemberValue === null || editMemberValue === ""}
+            disabled={editMemberValue === null || editMemberValue === ""}
             valueFormat="DD.MM.YYYY"
             label="Beitrittsdatum"
             placeholder="Beitrittsdatum"
@@ -327,7 +329,7 @@ export default function HomePage() {
         mx="auto"
         mt="xl"
         onClick={toggleColorScheme}
-        style={{cursor: "pointer",  userSelect: "none"}}
+        style={{ cursor: "pointer", userSelect: "none" }}
       >
         Farbschema ändern
       </Text>
@@ -364,21 +366,59 @@ export default function HomePage() {
         mx="auto"
         mt="xl"
         onClick={toggleEditUsers}
-        style={{cursor: "pointer",  userSelect: "none"}}
+        style={{ cursor: "pointer", userSelect: "none" }}
       >
         Clanmitglieder einsehen
       </Text>
       <Collapse in={editUsersOpened} mb={150}>
-        <Slider value={memberColumns} onChange={setMemberColumns} min={1} max={10} marks={[
-          { value: 2, label: '2' },
-          { value: 5, label: '5' },
-          { value: 8, label: '8' },]} mb={10} />
+        <Slider
+          value={memberColumns}
+          onChange={setMemberColumns}
+          min={1}
+          max={10}
+          marks={[
+            { value: 2, label: '2' },
+            { value: 5, label: '5' },
+            { value: 8, label: '8' },]}
+          mb={25} />
+        <SimpleGrid cols={2} w={"100%"} mb={25}>
+          <Container size={"100%"}>
+            <Text>
+              Mindest Fischteilnahmen Prozent
+            </Text>
+            <Slider
+              value={minFishPercente}
+              onChange={setminFishPercente}
+              min={0}
+              max={100}
+              marks={[
+                { value: 20, label: '20%' },
+                { value: 50, label: '50%' },
+                { value: 80, label: '80%' },]}
+              mb={10} />
+          </Container>
+          <Container size={"100%"}> 
+            <Text>
+              Mindest Spenden Prozent
+            </Text>
+            <Slider
+              value={minDonationPercente}
+              onChange={setMinDonationPercente}
+              min={0}
+              max={100}
+              marks={[
+                { value: 20, label: '20%' },
+                { value: 50, label: '50%' },
+                { value: 80, label: '80%' },]}
+              mb={10} />
+          </Container>
+        </SimpleGrid>
         <SimpleGrid cols={memberColumns} px={69} mx={"auto"}>
           {users.map((user, index) => {
-            return <UserCard key={index} data={user} />;
+            return <UserCard key={index} data={user} minFishPercente={minFishPercente} minDonationPercente={minDonationPercente} />;
           })}
         </SimpleGrid>
       </Collapse>
-    </>
+    </Container>
   );
 }
