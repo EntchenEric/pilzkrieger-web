@@ -98,6 +98,7 @@ export default function HomePage() {
       const users = data.data;
       console.log(users);
       setUsers(users);
+      setReloadValues(false);
     };
 
     if(reloadValues){
@@ -132,6 +133,7 @@ export default function HomePage() {
             });
             const respoData = await respo.json();
             setReloadValues(true)
+            closeAddMemberModal();
           }}
         >
           Hinzufügen
@@ -163,6 +165,7 @@ export default function HomePage() {
               }),
             });
             setReloadValues(true)
+            closeRemoveMemberModal();
           }}
         >
           Entfernen
@@ -191,6 +194,7 @@ export default function HomePage() {
               joinedAt: new Date(member.joinedAt)
             })
             seteditMemberValue(value)
+            closeEditMemberModal()
           }}
         />
 
@@ -242,6 +246,7 @@ export default function HomePage() {
             });
 
             setReloadValues(true)
+            closeEditMemberModal();
           }}
         >
           Bearbeiten
@@ -273,6 +278,7 @@ export default function HomePage() {
               });
             });
             setReloadValues(true)
+            closeFishiErgebnisseMdal();
           }}
           mt={"lg"}
         >
@@ -313,6 +319,7 @@ export default function HomePage() {
               });
             });
             setReloadValues(true)
+            closeBulkAddDonationsModal();
           }}
           mt={"lg"}
         >
