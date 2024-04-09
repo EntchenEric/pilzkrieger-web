@@ -79,8 +79,8 @@ export default function HomePage() {
   const [users, setUsers] = useState([]);
 
   const [memberColumns, setMemberColumns] = useState(5);
-  const [minDonationPercente, setMinDonationPercente] = useState(80);
-  const [minFishPercente, setminFishPercente] = useState(80);
+  const [minDonationPercente, setMinDonationPercente] = useState(90);
+  const [minFishPercente, setminFishPercente] = useState(75);
 
 
   useEffect(() => {
