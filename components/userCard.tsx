@@ -3,7 +3,7 @@ import { useDisclosure } from "@mantine/hooks";
 import moment from "moment";
 import { useEffect, useState } from "react";
 
-export function UserCard({ data, minFishPercente, minDonationPercente}: {data: any, minFishPercente: number, minDonationPercente: number}) {
+export function UserCard({ data, minFishPercente, minDonationPercente }: { data: any, minFishPercente: number, minDonationPercente: number }) {
   const [opened, { toggle: toggle }] = useDisclosure(false);
   const [nameHistoryopened, { toggle: toggleNameHistory }] = useDisclosure(false);
 
@@ -42,11 +42,28 @@ export function UserCard({ data, minFishPercente, minDonationPercente}: {data: a
 
   const maxPossibleFish = (diffDays * 2) - getTimeStatus(date1);
 
-  const maxPossibleDonatons = diffDays * 500;
+  function calculateMaxPossibleDonations() {
+
+    let maxPossibleDonatons = diffDays * 500;
+
+    const weekdayIndex = date2.getDay();
+
+    if(weekdayIndex !== 6){
+      maxPossibleDonatons -= 500 * (weekdayIndex);
+    }
+
+    return maxPossibleDonatons
+  }
+
+
+
+
+
+  const maxPossibleDonatons = calculateMaxPossibleDonations()
 
   useEffect(() => {
     let normalColor = false
-    if(data.name === "Eichel"){
+    if (data.name === "Eichel") {
       console.log((data.donations / maxPossibleDonatons) * 100 < minDonationPercente)
       console.log((data.fish / maxPossibleFish) * 100 < minFishPercente)
     }
@@ -58,12 +75,12 @@ export function UserCard({ data, minFishPercente, minDonationPercente}: {data: a
     }
     else if (isWithinRange((data.donations / maxPossibleDonatons) * 100, minDonationPercente, 5)) {
       setNameColor("orange")
-    }  
+    }
     else {
       normalColor = true
     }
-    
-    if((data.fish / maxPossibleFish) * 100 < minFishPercente) {
+
+    if ((data.fish / maxPossibleFish) * 100 < minFishPercente) {
       setNameColor("darkred")
     }
     else if (isWithinRange((data.fish / maxPossibleFish) * 100, minFishPercente, 2)) {
@@ -72,12 +89,12 @@ export function UserCard({ data, minFishPercente, minDonationPercente}: {data: a
     else if (isWithinRange((data.fish / maxPossibleFish) * 100, minFishPercente, 5)) {
       setNameColor("orange")
     }
-    else if (normalColor){
+    else if (normalColor) {
       setNameColor("")
     }
   }, [minDonationPercente, minFishPercente])
 
-  
+
 
   return (
     <>
