@@ -12,6 +12,7 @@ import {
   NumberInput,
   Select,
   SimpleGrid,
+  Slider,
   Text,
   TextInput,
 } from "@mantine/core";
@@ -50,7 +51,7 @@ export default function HomePage() {
   const editMemberForm = useForm({
     initialValues: {
       nameChange: "",
-      fishParticipation: false,
+      fishParticipations: 0,
       donations: 0,
     },
   });
@@ -71,6 +72,9 @@ export default function HomePage() {
   );
 
   const [users, setUsers] = useState([]);
+
+  const [memberColumns, setMemberColumns] = useState(5);
+
 
   useEffect(() => {
     const getUsers = async () => {
@@ -97,9 +101,9 @@ export default function HomePage() {
       <Modal
         opened={addMemberModalOpened}
         onClose={closeAddMemberModal}
-        title="Mitglied hizufügen"
+        title="Mitglied hinzufügen"
       >
-        <Container>
+        <Container mb={"lg"}>
           <TextInput
             {...addMemberForm.getInputProps("name")}
             label="Name"
@@ -140,6 +144,7 @@ export default function HomePage() {
           searchable
           value={deleteMemberValue}
           onChange={setDeleteMemberValue}
+          mb={"lg"}
         />
         <Button
           onClick={() => {
@@ -170,10 +175,18 @@ export default function HomePage() {
           })}
           searchable
           value={editMemberValue}
-          onChange={seteditMemberValue}
+          onChange={(value: any) => {
+              const member: any = users.find((user: any) => user.id === value.split("(")[1].split(")")[0])
+              editMemberForm.setValues({
+                nameChange: member.name,
+                donations: member.donations,
+                fishParticipations: member.fish
+              })
+              seteditMemberValue(value)
+            }}
         />
 
-        <Container>
+        <Container mb={"lg"}>
           <TextInput
             {...editMemberForm.getInputProps("nameChange")}
             label="Name"
@@ -183,9 +196,15 @@ export default function HomePage() {
             {...editMemberForm.getInputProps("donations")}
             label="Spenden"
             placeholder="Spenden"
+            min={0}
+            step={100}
+            thousandSeparator=" "
+            stepHoldDelay={500}
+            stepHoldInterval={(t) => Math.max(1000 / t ** 1.2, 25)}
           />
-          <Checkbox
-            {...editMemberForm.getInputProps("fishParticipation")}
+          <NumberInput
+            mt={"sm"}
+            {...editMemberForm.getInputProps("fishParticipations")}
             label="Fischteilnahme"
             placeholder="Fischteilnahme"
           />
@@ -198,6 +217,8 @@ export default function HomePage() {
               body: JSON.stringify({
                 id: editMemberValue?.split("(")[1].split(")")[0],
                 ...editMemberForm.values,
+                setDonations: true,
+                setFishParticipations: true
               }),
             });
 
@@ -212,7 +233,7 @@ export default function HomePage() {
       <Modal
         opened={fishiErgebnisseMdalOpened}
         onClose={closeFishiErgebnisseMdal}
-        title="Fischikampf ergebnisse"
+        title="Fischikampf Teilnahmen"
       >
         <MultiSelect
           data={users.map((user: any) => {
@@ -220,6 +241,7 @@ export default function HomePage() {
           })}
           value={fishiTeilnehmer}
           onChange={setFishiTelnehmer}
+          searchable
         />
         <Button
           onClick={() => {
@@ -298,6 +320,28 @@ export default function HomePage() {
       <Collapse in={colorSchemeOpened}>
         <ColorSchemeToggle />
       </Collapse>
+
+      <SimpleGrid cols={{ base: 1, lg: 3 }} max-w={"750"} mx="auto" mt={20}>
+        <Button p={0} onClick={openAddMemberModal}>
+          Mitglied hinzufügen
+        </Button>
+        <Button p={0} onClick={openRemoveMemberModal}>
+          Mitglied entefernen
+        </Button>
+        <Button p={0} onClick={() => {
+          openEditMemberModal()
+        }}>
+          Mitgliederdaten bearbeiten
+        </Button>
+      </SimpleGrid>
+      <SimpleGrid cols={{ base: 1, lg: 2 }} max-w={"750"} mx="auto" mt={20}>
+        <Button onClick={openFishiErgebnisseMdal} mx="auto">
+          Fischikampf Teilnahmen
+        </Button>
+        <Button onClick={openBulkAddDonationsModal} mx="auto">
+          Bulk Spenden hinzufügen
+        </Button>
+      </SimpleGrid>
       <Text
         c="dimmed"
         ta="center"
@@ -311,31 +355,16 @@ export default function HomePage() {
         Clanmitglieder einsehen
       </Text>
       <Collapse in={editUsersOpened}>
-        <SimpleGrid cols={3} w={"750"} mx={"auto"}>
+        <Slider value={memberColumns} onChange={setMemberColumns} min={1} max={10} marks={[
+          { value: 2, label: '2' },
+          { value: 5, label: '5' },
+          { value: 8, label: '8' },]} mb={10} />
+        <SimpleGrid cols={memberColumns} px={69} mx={"auto"}>
           {users.map((user, index) => {
             return <UserCard key={index} data={user} />;
           })}
         </SimpleGrid>
       </Collapse>
-      <SimpleGrid cols={{ base: 1, lg: 3 }} max-w={"750"} mx="auto" mt={20}>
-        <Button p={0} onClick={openAddMemberModal}>
-          Mitglied hinzufügen
-        </Button>
-        <Button p={0} onClick={openRemoveMemberModal}>
-          Mitglied entefernen
-        </Button>
-        <Button p={0} onClick={openEditMemberModal}>
-          Mitgliederdaten hinzufügen
-        </Button>
-      </SimpleGrid>
-      <SimpleGrid cols={{ base: 1, lg: 2 }} max-w={"750"} mx="auto" mt={20}>
-        <Button onClick={openFishiErgebnisseMdal} mx="auto">
-          Fischikampf ergebnisse
-        </Button>
-        <Button onClick={openBulkAddDonationsModal} mx="auto">
-          Bulk Spnden hinzufügen
-        </Button>
-      </SimpleGrid>
     </>
   );
 }

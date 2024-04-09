@@ -38,7 +38,18 @@ export const POST = async (request: Request) => {
         })
     }
 
-    if (data.donations) {
+    if (data.donations && data.setDonations) {
+        const user = await prisma.user.update({
+            where: {
+                id: data.id
+            },
+            data: {
+                donations: data.donations
+            }
+        })
+    }
+
+    if (data.donations && !data.setDonations) {
         const oldDonations = await prisma.user.findUnique({
             where: {
                 id: data.id
@@ -74,6 +85,37 @@ export const POST = async (request: Request) => {
             },
             data: {
                 fish: data.fishParticipation + oldFishParticipation
+            }
+        })
+    }
+
+    if (data.fishParticipations && data.setFishParticipations) {
+        const user = await prisma.user.update({
+            where: {
+                id: data.id
+            },
+            data: {
+                fish: data.fishParticipations
+            }
+        })
+    }
+
+    if (data.fishParticipations && !data.setFishParticipations) {
+        const oldFishParticipation = await prisma.user.findUnique({
+            where: {
+                id: data.id
+            }
+        }).then((user) => {
+            if (!user) return 0
+            return user.fish
+        })
+
+        const user = await prisma.user.update({
+            where: {
+                id: data.id
+            },
+            data: {
+                fish: data.fishParticipations + oldFishParticipation
             }
         })
     }
