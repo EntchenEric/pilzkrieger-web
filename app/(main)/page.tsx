@@ -20,6 +20,7 @@ import { useDisclosure } from "@mantine/hooks";
 import { useState, useEffect, use } from "react";
 import { UserCard } from "@/components/userCard";
 import { useForm } from "@mantine/form";
+import { DatePickerInput } from '@mantine/dates';
 
 export default function HomePage() {
   const [colorSchemeOpened, { toggle: toggleColorScheme }] =
@@ -53,6 +54,7 @@ export default function HomePage() {
       nameChange: "",
       fishParticipations: 0,
       donations: 0,
+      joinedAt: new Date(),
     },
   });
 
@@ -176,23 +178,26 @@ export default function HomePage() {
           searchable
           value={editMemberValue}
           onChange={(value: any) => {
-              const member: any = users.find((user: any) => user.id === value.split("(")[1].split(")")[0])
-              editMemberForm.setValues({
-                nameChange: member.name,
-                donations: member.donations,
-                fishParticipations: member.fish
-              })
-              seteditMemberValue(value)
-            }}
+            const member: any = users.find((user: any) => user.id === value.split("(")[1].split(")")[0])
+            editMemberForm.setValues({
+              nameChange: member.name,
+              donations: member.donations,
+              fishParticipations: member.fish,
+              joinedAt: new Date(member.joinedAt)
+            })
+            seteditMemberValue(value)
+          }}
         />
 
         <Container mb={"lg"}>
           <TextInput
+            disabled = {editMemberValue === null || editMemberValue === ""}
             {...editMemberForm.getInputProps("nameChange")}
             label="Name"
             placeholder="Name"
           />
           <NumberInput
+            disabled = {editMemberValue === null || editMemberValue === ""}
             {...editMemberForm.getInputProps("donations")}
             label="Spenden"
             placeholder="Spenden"
@@ -203,11 +208,20 @@ export default function HomePage() {
             stepHoldInterval={(t) => Math.max(1000 / t ** 1.2, 25)}
           />
           <NumberInput
+            disabled = {editMemberValue === null || editMemberValue === ""}
             mt={"sm"}
             {...editMemberForm.getInputProps("fishParticipations")}
             label="Fischteilnahme"
             placeholder="Fischteilnahme"
           />
+          <DatePickerInput
+            disabled = {editMemberValue === null || editMemberValue === ""}
+            valueFormat="DD.MM.YYYY"
+            label="Beitrittsdatum"
+            placeholder="Beitrittsdatum"
+            {...editMemberForm.getInputProps("joinedAt")}
+          />
+
         </Container>
 
         <Button
@@ -354,7 +368,7 @@ export default function HomePage() {
       >
         Clanmitglieder einsehen
       </Text>
-      <Collapse in={editUsersOpened}>
+      <Collapse in={editUsersOpened} mb={150}>
         <Slider value={memberColumns} onChange={setMemberColumns} min={1} max={10} marks={[
           { value: 2, label: '2' },
           { value: 5, label: '5' },

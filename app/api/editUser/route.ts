@@ -38,6 +38,17 @@ export const POST = async (request: Request) => {
         })
     }
 
+    if (data.joinedAt) {
+        const user = await prisma.user.update({
+            where: {
+                id: data.id
+            },
+            data: {
+                joinedAt: new Date(data.joinedAt)
+            }
+        })
+    }
+
     if (data.donations && data.setDonations) {
         const user = await prisma.user.update({
             where: {
