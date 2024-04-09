@@ -37,6 +37,8 @@ export function UserCard(data: any) {
 
   const maxPossibleFish = (diffDays * 2) - getTimeStatus(date1);
 
+  const maxPossibleDonatons = diffDays * 500;
+
   return (
     <>
       <Container>
@@ -46,14 +48,14 @@ export function UserCard(data: any) {
         <Collapse in={opened}>
           <Text>Id: {data.data.id}</Text>
           <Text>Name: {data.data.name}</Text>
-          <Text>Spenden: {data.data.donations}</Text>
+          <Text>Spenden: {data.data.donations}/{maxPossibleDonatons}</Text>
           <Text>
             Fisch teilnahmen: {data.data.fish}/{maxPossibleFish}
           </Text>
           <Text>
             Beigetreten am: {moment(data.data.joinedAt).format("Do MMM YYYY")}
           </Text>
-          {data.data.nameHistories ? (
+          {data.data.nameHistories.length != 0 ? (
             <>
               <Text style={{cursor: "pointer",  userSelect: "none"}} onClick={toggleNameHistory}>Vergangene Namen</Text>
               <Collapse in={nameHistoryopened}>
