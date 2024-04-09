@@ -27,6 +27,9 @@ export default function HomePage() {
     useDisclosure(true);
   const [editUsersOpened, { toggle: toggleEditUsers }] = useDisclosure(true);
 
+  const [reloadValues, setReloadValues] = useState<boolean>(true);
+
+
   const [
     addMemberModalOpened,
     { open: openAddMemberModal, close: closeAddMemberModal },
@@ -97,8 +100,10 @@ export default function HomePage() {
       setUsers(users);
     };
 
-    getUsers();
-  }, []);
+    if(reloadValues){
+      getUsers();
+    }
+  }, [reloadValues]);
 
   return (
     <Container px={150} size={"100%"}>
@@ -126,8 +131,7 @@ export default function HomePage() {
               body: JSON.stringify(addMemberForm.values),
             });
             const respoData = await respo.json();
-            //reload window
-            window.location.reload()
+            setReloadValues(true)
           }}
         >
           Hinzufügen
@@ -158,8 +162,7 @@ export default function HomePage() {
                 id: deleteMemberValue?.split("(")[1].split(")")[0],
               }),
             });
-            //reload window
-            window.location.reload();
+            setReloadValues(true)
           }}
         >
           Entfernen
@@ -238,8 +241,7 @@ export default function HomePage() {
               }),
             });
 
-            //reload window
-            window.location.reload();
+            setReloadValues(true)
           }}
         >
           Bearbeiten
@@ -270,8 +272,7 @@ export default function HomePage() {
                 }),
               });
             });
-            //reload window
-            window.location.reload();
+            setReloadValues(true)
           }}
           mt={"lg"}
         >
@@ -311,8 +312,7 @@ export default function HomePage() {
                 }),
               });
             });
-            //reload window
-            window.location.reload();
+            setReloadValues(true)
           }}
           mt={"lg"}
         >
