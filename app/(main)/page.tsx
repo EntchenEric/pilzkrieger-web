@@ -368,7 +368,7 @@ export default function HomePage() {
         onClick={toggleEditUsers}
         style={{ cursor: "pointer", userSelect: "none" }}
       >
-        Clanmitglieder einsehen
+        Clanmitglieder einsehen ({users.length})
       </Text>
       <Collapse in={editUsersOpened} mb={150}>
         <Slider
