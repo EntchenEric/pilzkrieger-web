@@ -45,6 +45,7 @@ export function UserCard({ data, minFishPercente, minDonationPercente}: {data: a
   const maxPossibleDonatons = diffDays * 500;
 
   useEffect(() => {
+    let normalColor = false
     if(data.name === "Eichel"){
       console.log((data.donations / maxPossibleDonatons) * 100 < minDonationPercente)
       console.log((data.fish / maxPossibleFish) * 100 < minFishPercente)
@@ -52,23 +53,29 @@ export function UserCard({ data, minFishPercente, minDonationPercente}: {data: a
     if ((data.donations / maxPossibleDonatons) * 100 < minDonationPercente) {
       setNameColor("darkred")
     }
-    else if (isWithinRange((data.donations / maxPossibleDonatons) * 100, minDonationPercente, 4)) {
+    else if (isWithinRange((data.donations / maxPossibleDonatons) * 100, minDonationPercente, 2)) {
       setNameColor("red")
     }
-    else if (isWithinRange((data.donations / maxPossibleDonatons) * 100, minDonationPercente, 10)) {
+    else if (isWithinRange((data.donations / maxPossibleDonatons) * 100, minDonationPercente, 5)) {
       setNameColor("orange")
+    }  
+    else {
+      normalColor = true
     }
-  
+    
     if((data.fish / maxPossibleFish) * 100 < minFishPercente) {
       setNameColor("darkred")
     }
-    else if (isWithinRange((data.fish / maxPossibleFish) * 100, minFishPercente, 4)) {
+    else if (isWithinRange((data.fish / maxPossibleFish) * 100, minFishPercente, 2)) {
       setNameColor("red")
     }
-    else if (isWithinRange((data.fish / maxPossibleFish) * 100, minFishPercente, 10)) {
+    else if (isWithinRange((data.fish / maxPossibleFish) * 100, minFishPercente, 5)) {
       setNameColor("orange")
     }
-  }, [])
+    else if (normalColor){
+      setNameColor("")
+    }
+  }, [minDonationPercente, minFishPercente])
 
   
 
