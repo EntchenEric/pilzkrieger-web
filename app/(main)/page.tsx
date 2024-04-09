@@ -327,7 +327,7 @@ export default function HomePage() {
         mx="auto"
         mt="xl"
         onClick={toggleColorScheme}
-        style={{ cursor: "pointer" }}
+        style={{cursor: "pointer",  userSelect: "none"}}
       >
         Farbschema ändern
       </Text>
@@ -364,7 +364,7 @@ export default function HomePage() {
         mx="auto"
         mt="xl"
         onClick={toggleEditUsers}
-        style={{ cursor: "pointer" }}
+        style={{cursor: "pointer",  userSelect: "none"}}
       >
         Clanmitglieder einsehen
       </Text>

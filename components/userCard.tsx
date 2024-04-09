@@ -40,7 +40,7 @@ export function UserCard(data: any) {
   return (
     <>
       <Container>
-        <Text size="xl" fw="800" onClick={toggle} style={{ cursor: "pointer" }}>
+        <Text size="xl" fw="800" onClick={toggle} style={{cursor: "pointer",  userSelect: "none"}}>
           {data.data.name}
         </Text>
         <Collapse in={opened}>
@@ -55,7 +55,7 @@ export function UserCard(data: any) {
           </Text>
           {data.data.nameHistories ? (
             <>
-              <Text style={{cursor: "pointer"}} onClick={toggleNameHistory}>Vergangene Namen</Text>
+              <Text style={{cursor: "pointer",  userSelect: "none"}} onClick={toggleNameHistory}>Vergangene Namen</Text>
               <Collapse in={nameHistoryopened}>
                 {data.data.nameHistories.map((name: any, index: number) => {
                   console.log(name)
